@@ -1,0 +1,202 @@
+package com.elorrieta.vistas;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class LoginPanel extends JPanel{
+	private static final long serialVersionUID = 1L;
+	private JLabel titleLabel;
+	private JTextField nicknameField;
+	private JPasswordField passwordField;
+	private JButton loginButton;
+	private JButton registerButton;
+	private JLabel logoLabel;
+	
+	public LoginPanel(JFrame frame) {
+		frame.setSize(400, 400);
+		setLayout(null);
+		setBackground(Color.decode("#232637"));
+
+		// Logito
+//		logoLabel = new JLabel(new ImageIcon(getClass().getResource("/Logo01.svg")));
+//		logoLabel.setBounds(140, 15, 100, 50);
+//		add(logoLabel);
+
+		// Etiqueta de título
+		titleLabel = new JLabel("<html><b>Inicia Sesión con tu cuenta de SpinningCat</b></html>");
+		titleLabel.setForeground(Color.WHITE);
+		titleLabel.setBackground(new Color(0, 0, 0, 100)); // Negro con transparencia
+		titleLabel.setOpaque(true);
+		titleLabel.setFont(new Font("Roboto", Font.BOLD, 20));
+		titleLabel.setBounds(35, 30, 300, 60);
+		add(titleLabel);
+
+		// Campos de texto
+		nicknameField = new JTextField();
+		nicknameField.setFont(new Font("Arial", Font.PLAIN, 16));
+		nicknameField.setBounds(35, 120, 300, 35);
+		nicknameField.setBackground(new Color(39, 42, 61));
+		nicknameField.setForeground(Color.WHITE);
+		nicknameField.setCaretColor(Color.WHITE);
+		nicknameField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Nickname", 0, 0,
+				null, new Color(180, 180, 180)));
+		add(nicknameField);
+
+		// Campo de contraseña
+		passwordField = new JPasswordField();
+		passwordField.setFont(new Font("Arial", Font.PLAIN, 16));
+		passwordField.setBounds(35, 170, 300, 35);
+		passwordField.setBackground(new Color(39, 42, 61));
+		passwordField.setForeground(Color.WHITE);
+		passwordField.setCaretColor(Color.WHITE);
+		passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Password", 0, 0,
+				null, new Color(180, 180, 180)));
+		add(passwordField);
+
+		// Botón de login
+		loginButton = new JButton("Log in");
+		loginButton.setBounds(35, 270, 300, 45);
+		loginButton.setFont(new Font("Arial", Font.BOLD, 18));
+		loginButton.setForeground(Color.WHITE);
+		loginButton.setBackground(new Color(255, 98, 0));
+		loginButton.setBorderPainted(false);
+		loginButton.setFocusPainted(false);
+		loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		add(loginButton);
+
+		// Botón de registro
+		registerButton = new JButton("Register");
+		registerButton.setBounds(35, 320, 300, 40);
+		registerButton.setFont(new Font("Arial", Font.BOLD, 16));
+		registerButton.setForeground(Color.WHITE);
+		registerButton.setBackground(new Color(100, 100, 100));
+		registerButton.setBorderPainted(false);
+		registerButton.setFocusPainted(false);
+		registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		add(registerButton);
+//		registerButton.addActionListener(e -> {
+//			if(!ConexionControlador.getInstance().comprobarConexion()) { // si no hay conexión
+//				JOptionPane.showMessageDialog(frame, "Has encontrado una función premium. \nPara continuar con la edición de datos en modo offline, suscribete al plan premium por 2,99€/mes.", "Funcionalidad Premium",
+//						JOptionPane.ERROR_MESSAGE);
+//				return;
+//			}
+//			frame.setContentPane(new RegistroPanel(frame));
+//			frame.validate();
+//		});
+
+		// Hacer que el botón login sea el predeterminado al pulsar Enter
+		frame.getRootPane().setDefaultButton(loginButton);
+
+		// Imagen de fondo (está en /resources)
+//		ImageIcon fondo = new ImageIcon(getClass().getResource("/BackgroundLogin.png"));
+//		JLabel fondoLabel = new JLabel(fondo);
+//		fondoLabel.setBounds(0, 0, 400, 400);
+//		add(fondoLabel);
+
+		// Evento del botón login
+		loginButton.addActionListener(e -> {
+			String nickname = nicknameField.getText().trim();
+			String pass = new String(passwordField.getPassword());
+
+			if (nickname.isEmpty() || pass.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+//				try {
+//					Boolean conexion = new ConexionControlador().comprobarConexion();
+//					if (conexion) {
+//						UsuarioControlador controlador = UsuarioControlador.getInstance();
+//						Usuario usuario = controlador.buscarPorNick(nickname);
+//						if (usuario == null) {
+//							JOptionPane.showMessageDialog(this, "El usuario no existe.", "Error",
+//									JOptionPane.ERROR_MESSAGE);
+//						} else if (!usuario.getContrasena().equals(pass)) {
+//							JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Error",
+//									JOptionPane.ERROR_MESSAGE);
+//						} else {
+//							JOptionPane.showMessageDialog(this,
+//									"Login correcto. ¡Bienvenido/a " + usuario.getNickname(), "Login",
+//									JOptionPane.INFORMATION_MESSAGE);
+//							// Iniciar proceso de backup en segundo plano
+//							Thread backupThread = new Thread(() -> {
+//								try {
+//									System.out.println("Iniciando proceso de backup...");
+//									// OBTENER RUTAS JAVA
+//									String javaHome = System.getProperty("java.home");
+//									String javaBin = javaHome + "/bin/java";
+//									String classpath = System.getProperty("java.class.path");
+//
+//									// CREAR PROCESO
+//									String[] processInfo = { javaBin, "-cp", classpath, "procesos.ProcesoBackup" };
+//									Runtime runtime = Runtime.getRuntime();
+//									Process process = runtime.exec(processInfo);
+//
+//									int exitCode = process.waitFor();
+//									if (exitCode == 0) {
+//										System.out.println("Proceso de backup finalizado correctamente.");
+//									} else {
+//										System.out.println("El proceso de backup finalizó con errores.");
+//									}
+//								} catch (IOException e2) {
+//									e2.printStackTrace();
+//								} catch (InterruptedException e1) {
+//									e1.printStackTrace();
+//								}
+//							});
+//							backupThread.start();
+							// Cambiar de pantalla
+//							frame.setContentPane(new WorkoutsPanel(frame, usuario));
+//							frame.validate();
+						}
+//					} else {
+//						System.out.println("No hay conexión a Internet. Iniciando sesión en modo offline.");
+//						GestorFicheros gestor = GestorFicheros.getInstance();
+//						gestor.leerUsuarios();
+//						Usuario usuario = gestor.buscarUsuarioOffline(nickname);
+//						if (usuario != null) {
+//							if (!usuario.getContrasena().equals(pass)) {
+//								JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Error",
+//										JOptionPane.ERROR_MESSAGE);
+//								return;
+//							} else {
+//								JOptionPane.showMessageDialog(this,
+//										"Login correcto. ¡Bienvenido/a " + usuario.getNickname(), "Login",
+//										JOptionPane.INFORMATION_MESSAGE);
+//								// Cambiar de pantalla
+//								frame.setContentPane(new WorkoutsPanel(frame, usuario));
+//								frame.validate();
+//							}
+//						} else {
+//							JOptionPane.showMessageDialog(this, "El usuario no existe.", "Error",
+//									JOptionPane.INFORMATION_MESSAGE);
+//						}
+//					}
+//				} catch (FileNotFoundException fnf) {
+//					JOptionPane.showMessageDialog(null,
+//							"Para poder usar la aplicacion en modo sin conexión, inicia sesión al menos una vez con conexión a internet.",
+//							"Error", JOptionPane.ERROR_MESSAGE);
+//				} catch (IOException ex) {
+//					ex.printStackTrace();
+//				} catch (ExecutionException ee) {
+//					ee.printStackTrace();
+//				} catch (InterruptedException ie) {
+//					ie.printStackTrace();
+//				}
+//			}
+		});
+	}
+}
