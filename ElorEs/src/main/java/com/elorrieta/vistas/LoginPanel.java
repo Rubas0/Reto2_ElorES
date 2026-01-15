@@ -16,8 +16,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
-public class LoginPanel extends JPanel{
+import com.elorrieta.bbdd.entidades.User;
+import com.elorrieta.controladores.ControladorJSON;
+import com.elorrieta.tcp.TcpLogin;
+
+public class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel titleLabel;
 	private JTextField nicknameField;
@@ -25,9 +30,9 @@ public class LoginPanel extends JPanel{
 	private JButton loginButton;
 	private JButton registerButton;
 	private JLabel logoLabel;
-	
+
 	public LoginPanel(JFrame frame) {
-		frame.setSize(400, 400);
+		frame.setSize(400, 480);
 		setLayout(null);
 		setBackground(Color.decode("#232637"));
 
@@ -107,6 +112,18 @@ public class LoginPanel extends JPanel{
 //		fondoLabel.setBounds(0, 0, 400, 400);
 //		add(fondoLabel);
 
+		// Texto de "¿Has olvidado tu contraseña?"
+		JTextPane txtForgot = new JTextPane();
+		txtForgot.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtForgot.setEditable(false);
+		txtForgot.setOpaque(false);
+		txtForgot.setBackground(new Color(0, 0, 0, 0));
+		txtForgot.setText("¿Has olvidado tu contraseña?");
+		txtForgot.setBounds(35, 377, 234, 26);
+		txtForgot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		txtForgot.setForeground(Color.WHITE);
+		add(txtForgot);
+
 		// Evento del botón login
 		loginButton.addActionListener(e -> {
 			String nickname = nicknameField.getText().trim();
@@ -116,6 +133,22 @@ public class LoginPanel extends JPanel{
 				JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
+
+				try {
+					User userLogin = TcpLogin.login(nickname, pass);
+					if (userLogin.getUsername().equals("ERROR")) {
+
+						JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						
+						return;
+					} else {
+						System.out.println("login tcp correcto Usuario: " + userLogin.getNombre());
+				
+					}
+				} catch (Exception ex) {
+					System.out.println("error en el login tcp");
+				}
 //				try {
 //					Boolean conexion = new ConexionControlador().comprobarConexion();
 //					if (conexion) {
@@ -158,10 +191,10 @@ public class LoginPanel extends JPanel{
 //								}
 //							});
 //							backupThread.start();
-							// Cambiar de pantalla
+				// Cambiar de pantalla
 //							frame.setContentPane(new WorkoutsPanel(frame, usuario));
 //							frame.validate();
-						}
+			}
 //					} else {
 //						System.out.println("No hay conexión a Internet. Iniciando sesión en modo offline.");
 //						GestorFicheros gestor = GestorFicheros.getInstance();

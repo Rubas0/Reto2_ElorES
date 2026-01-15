@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class TcpLogin {
 
-    public static void main(String[] args) {
+   public static User login(String nickname, String password) {
         Socket socket = null;
         String ipServer = "127.0.0.1";
         int puertoServer = 49171;
@@ -22,7 +22,7 @@ public class TcpLogin {
             socket = new Socket(ipServer, puertoServer);
 
             // Crear un objeto User con las credenciales de inicio de sesión (mas a delante se recibira por parametro en esta clase)
-            User user = new User("goduser", "123456");
+            User user = new User(nickname,password);
             ControladorJSON.UserToJSON(user);
 
             // enviar el archivo JSON al servidor
@@ -42,15 +42,15 @@ public class TcpLogin {
             fos.write(response, 0, bytesRead);
             fos.close();
             System.out.println("Cliente - Respuesta recibida del servidor.");
-
-//            fos = new FileOutputStream("user.json");
-//            socket.getOutputStream().read();
-//            fos.close();
-//            System.out.println("Cliente - Respuesta recibida del servidor.");
-
+            
+            // Borrar ficheros JSON usados en el login para que no queden restos
+            ControladorJSON.borrarFicherosJSON("response.json","user.json");
+            
+            return ControladorJSON.JSONToUser("response.json");
 
         } catch (Exception e) {
             System.out.println("Cliente - Error: " + e.getMessage());
+            return null;
         }
     }
 }
