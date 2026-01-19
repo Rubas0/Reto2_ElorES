@@ -1,6 +1,7 @@
 package com.elorrieta.controladores;
 
-import com.elorrieta.bbdd.entidades.User;
+import com.elorrieta.entities.User;
+import com.elorrieta.threads.mensajes.parts.LoginParts;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -33,7 +34,21 @@ public class ControladorJSON {
 		}catch (Exception e){
 			System.out.println("error");
 		}
+		// Borrar ficheros JSON usados en el login para que no queden restos
+            // ControladorJSON.borrarFicherosJSON("response.json","user.json");
 		return user;
+	}
+
+	public static String LoginPartsToJSON(LoginParts loginParts){
+		Gson gson = null;
+		String jsonString = null;
+		try {
+			gson = new GsonBuilder().setPrettyPrinting().create();
+			jsonString = gson.toJson(loginParts);
+		}catch (Exception e){
+			System.out.println("error");
+		}
+		return jsonString;
 	}
     
     public static void borrarFicherosJSON(String... filenames) { // Uso de varargs para múltiples ficheros

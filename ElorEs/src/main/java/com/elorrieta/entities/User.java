@@ -1,4 +1,4 @@
-package com.elorrieta.bbdd.entidades;
+package com.elorrieta.entities;
 
 import java.io.Serializable;
 

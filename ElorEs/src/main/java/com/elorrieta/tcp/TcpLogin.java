@@ -1,52 +1,68 @@
 package com.elorrieta.tcp;
 
-import com.elorrieta.bbdd.entidades.User;
 import com.elorrieta.controladores.ControladorJSON;
+import com.elorrieta.entities.User;
+import com.elorrieta.threads.mensajes.Mensaje;
+import com.elorrieta.threads.mensajes.MensajeRespuesta;
+import com.elorrieta.threads.mensajes.parts.LoginParts;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class TcpLogin {
 
-   public static User login(String nickname, String password) {
+    public static User login(String nickname, String password) {
         Socket socket = null;
         String ipServer = "127.0.0.1";
         int puertoServer = 49171;
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-
         try {
             // Crear el socket para conectarse al servidor
-            System.out.println("Cliente - Iniciando conexión con " + ipServer + " en el puerto " + puertoServer);
             socket = new Socket(ipServer, puertoServer);
+            System.out.println("Cliente - Iniciando conexión con " + ipServer + " en el puerto " + puertoServer);
 
-            // Crear un objeto User con las credenciales de inicio de sesión (mas a delante se recibira por parametro en esta clase)
-            User user = new User(nickname,password);
-            ControladorJSON.UserToJSON(user);
+            // Crear ObjectOutputStream para enviar objetos
+            ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
 
-            // enviar el archivo JSON al servidor
-            fis = new FileInputStream("user.json");
-            byte[] buffer = new byte[fis.available()];
-            fis.read(buffer);
-            socket.getOutputStream().write(buffer);
-            socket.getOutputStream().flush();
-            fis.close();
-            System.out.println("Cliente - Archivo JSON enviado al servidor.");
+            // Crear un objeto LOGINPARTS
+            LoginParts loginParts = new LoginParts(nickname, password);
 
-            //recibir respuesta del servidor
+            // convertir LOGINPARTS a JSON
+            String jsonLogin = ControladorJSON.LoginPartsToJSON(loginParts);
 
-            byte[] response = new byte[1024];
-            int bytesRead = socket.getInputStream().read(response);
-            fos = new FileOutputStream("response.json");
-            fos.write(response, 0, bytesRead);
-            fos.close();
-            System.out.println("Cliente - Respuesta recibida del servidor.");
-            
-            // Borrar ficheros JSON usados en el login para que no queden restos
-            ControladorJSON.borrarFicherosJSON("response.json","user.json");
-            
-            return ControladorJSON.JSONToUser("response.json");
+            // Generar el objeto MENSAJE
+            Mensaje mensaje = new Mensaje("LOGIN", jsonLogin);
+
+            // Enviar el objeto
+            objectOutput.writeObject(mensaje);
+            objectOutput.flush();
+
+            System.out.println(
+                    "usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion() + ", json:" + mensaje.getJson());
+
+            // recibir respuesta del servidor
+
+            ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
+            MensajeRespuesta mensajeRespuesta = (MensajeRespuesta) objectInput.readObject();
+            System.out.println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getJson());
+            // Convertir el JSON recibido a un objeto User
+            User userRespuesta = ControladorJSON.JSONToUser(mensajeRespuesta.getJson());
+            System.out.println("Cliente - Usuario recibido: " + userRespuesta.getUsername());
+
+            // Cerrar recursos
+            objectOutput.close();
+            objectInput.close();
+            socket.close();
+
+            // Devolver el usuario recibido
+            return userRespuesta;
+
+        } catch (IOException e) {
+            System.err.println("Error de E/S: " + e.getMessage());
+            e.printStackTrace();
+            return null;
 
         } catch (Exception e) {
             System.out.println("Cliente - Error: " + e.getMessage());

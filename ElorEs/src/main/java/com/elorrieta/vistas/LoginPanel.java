@@ -3,12 +3,7 @@ package com.elorrieta.vistas;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,8 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
-import com.elorrieta.bbdd.entidades.User;
-import com.elorrieta.controladores.ControladorJSON;
+import com.elorrieta.entities.User;
 import com.elorrieta.tcp.TcpLogin;
 
 public class LoginPanel extends JPanel {
