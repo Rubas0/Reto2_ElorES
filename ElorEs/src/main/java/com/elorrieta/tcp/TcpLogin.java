@@ -1,13 +1,10 @@
 package com.elorrieta.tcp;
 
-import com.elorrieta.controladores.ControladorJSON;
 import com.elorrieta.entities.User;
 import com.elorrieta.threads.mensajes.Mensaje;
-import com.elorrieta.threads.mensajes.MensajeRespuesta;
 import com.elorrieta.threads.mensajes.parts.LoginParts;
 
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -29,26 +26,25 @@ public class TcpLogin {
             // Crear un objeto LOGINPARTS
             LoginParts loginParts = new LoginParts(nickname, password);
 
-            // convertir LOGINPARTS a JSON
-            String jsonLogin = ControladorJSON.LoginPartsToJSON(loginParts);
-
             // Generar el objeto MENSAJE
-            Mensaje mensaje = new Mensaje("LOGIN", jsonLogin);
+            Mensaje mensaje = new Mensaje("LOGIN", loginParts);
 
             // Enviar el objeto
             objectOutput.writeObject(mensaje);
             objectOutput.flush();
 
             System.out.println(
-                    "usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion() + ", json:" + mensaje.getJson());
+                    "usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion() + ", loginparts: "
+                            + mensaje.getContenido().toString());
 
             // recibir respuesta del servidor
-
             ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
-            MensajeRespuesta mensajeRespuesta = (MensajeRespuesta) objectInput.readObject();
-            System.out.println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getJson());
-            // Convertir el JSON recibido a un objeto User
-            User userRespuesta = ControladorJSON.JSONToUser(mensajeRespuesta.getJson());
+            Mensaje mensajeRespuesta = (Mensaje) objectInput.readObject();
+            System.out
+                    .println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getContenido().toString());
+
+            // Convertir el CONTENIDO DEL MENSAJE recibido a un objeto User
+            User userRespuesta = (User) mensajeRespuesta.getContenido();
             System.out.println("Cliente - Usuario recibido: " + userRespuesta.getUsername());
 
             // Cerrar recursos

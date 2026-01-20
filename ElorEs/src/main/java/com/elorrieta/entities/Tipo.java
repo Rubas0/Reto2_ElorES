@@ -1,12 +1,16 @@
 package com.elorrieta.entities;
 
-public class Tipo {
-	
+import java.io.Serializable;
+
+public class Tipo implements Serializable {
+
+    private static final long serialVersionUID = -8632164890217148L;
     private Integer id;
     private String name;
     private String nameEu;
 
-    public Tipo() {}
+    public Tipo() {
+    }
 
     public Tipo(String name, String nameEu) {
         this.name = name;

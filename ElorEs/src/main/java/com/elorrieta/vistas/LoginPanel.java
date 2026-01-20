@@ -23,7 +23,7 @@ public class LoginPanel extends JPanel {
 	private JPasswordField passwordField;
 	private JButton loginButton;
 	private JButton registerButton;
-	private JLabel logoLabel;
+	// private JLabel logoLabel;
 
 	public LoginPanel(JFrame frame) {
 		frame.setSize(400, 480);
@@ -31,9 +31,9 @@ public class LoginPanel extends JPanel {
 		setBackground(Color.decode("#232637"));
 
 		// Logito
-//		logoLabel = new JLabel(new ImageIcon(getClass().getResource("/Logo01.svg")));
-//		logoLabel.setBounds(140, 15, 100, 50);
-//		add(logoLabel);
+		// logoLabel = new JLabel(new ImageIcon(getClass().getResource("/Logo01.svg")));
+		// logoLabel.setBounds(140, 15, 100, 50);
+		// add(logoLabel);
 
 		// Etiqueta de título
 		titleLabel = new JLabel("<html><b>Inicia Sesión con tu cuenta de SpinningCat</b></html>");
@@ -87,24 +87,16 @@ public class LoginPanel extends JPanel {
 		registerButton.setFocusPainted(false);
 		registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		add(registerButton);
-//		registerButton.addActionListener(e -> {
-//			if(!ConexionControlador.getInstance().comprobarConexion()) { // si no hay conexión
-//				JOptionPane.showMessageDialog(frame, "Has encontrado una función premium. \nPara continuar con la edición de datos en modo offline, suscribete al plan premium por 2,99€/mes.", "Funcionalidad Premium",
-//						JOptionPane.ERROR_MESSAGE);
-//				return;
-//			}
-//			frame.setContentPane(new RegistroPanel(frame));
-//			frame.validate();
-//		});
 
 		// Hacer que el botón login sea el predeterminado al pulsar Enter
 		frame.getRootPane().setDefaultButton(loginButton);
 
 		// Imagen de fondo (está en /resources)
-//		ImageIcon fondo = new ImageIcon(getClass().getResource("/BackgroundLogin.png"));
-//		JLabel fondoLabel = new JLabel(fondo);
-//		fondoLabel.setBounds(0, 0, 400, 400);
-//		add(fondoLabel);
+		// ImageIcon fondo = new
+		// ImageIcon(getClass().getResource("/BackgroundLogin.png"));
+		// JLabel fondoLabel = new JLabel(fondo);
+		// fondoLabel.setBounds(0, 0, 400, 400);
+		// add(fondoLabel);
 
 		// Texto de "¿Has olvidado tu contraseña?"
 		JTextPane txtForgot = new JTextPane();
@@ -130,100 +122,22 @@ public class LoginPanel extends JPanel {
 
 				try {
 					User userLogin = TcpLogin.login(nickname, pass);
-					if (userLogin.getUsername().equals("ERROR")) {
+					if (userLogin == null) {
 
 						JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error",
 								JOptionPane.ERROR_MESSAGE);
-						
+
 						return;
 					} else {
-						System.out.println("login tcp correcto Usuario: " + userLogin.getNombre());
-				
+						JOptionPane.showMessageDialog(this, "Login correcto. ¡Bienvenido/a " + userLogin.getUsername(),
+								"Login",
+								JOptionPane.INFORMATION_MESSAGE);
+
 					}
 				} catch (Exception ex) {
 					System.out.println("error en el login tcp");
 				}
-//				try {
-//					Boolean conexion = new ConexionControlador().comprobarConexion();
-//					if (conexion) {
-//						UsuarioControlador controlador = UsuarioControlador.getInstance();
-//						Usuario usuario = controlador.buscarPorNick(nickname);
-//						if (usuario == null) {
-//							JOptionPane.showMessageDialog(this, "El usuario no existe.", "Error",
-//									JOptionPane.ERROR_MESSAGE);
-//						} else if (!usuario.getContrasena().equals(pass)) {
-//							JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Error",
-//									JOptionPane.ERROR_MESSAGE);
-//						} else {
-//							JOptionPane.showMessageDialog(this,
-//									"Login correcto. ¡Bienvenido/a " + usuario.getNickname(), "Login",
-//									JOptionPane.INFORMATION_MESSAGE);
-//							// Iniciar proceso de backup en segundo plano
-//							Thread backupThread = new Thread(() -> {
-//								try {
-//									System.out.println("Iniciando proceso de backup...");
-//									// OBTENER RUTAS JAVA
-//									String javaHome = System.getProperty("java.home");
-//									String javaBin = javaHome + "/bin/java";
-//									String classpath = System.getProperty("java.class.path");
-//
-//									// CREAR PROCESO
-//									String[] processInfo = { javaBin, "-cp", classpath, "procesos.ProcesoBackup" };
-//									Runtime runtime = Runtime.getRuntime();
-//									Process process = runtime.exec(processInfo);
-//
-//									int exitCode = process.waitFor();
-//									if (exitCode == 0) {
-//										System.out.println("Proceso de backup finalizado correctamente.");
-//									} else {
-//										System.out.println("El proceso de backup finalizó con errores.");
-//									}
-//								} catch (IOException e2) {
-//									e2.printStackTrace();
-//								} catch (InterruptedException e1) {
-//									e1.printStackTrace();
-//								}
-//							});
-//							backupThread.start();
-				// Cambiar de pantalla
-//							frame.setContentPane(new WorkoutsPanel(frame, usuario));
-//							frame.validate();
 			}
-//					} else {
-//						System.out.println("No hay conexión a Internet. Iniciando sesión en modo offline.");
-//						GestorFicheros gestor = GestorFicheros.getInstance();
-//						gestor.leerUsuarios();
-//						Usuario usuario = gestor.buscarUsuarioOffline(nickname);
-//						if (usuario != null) {
-//							if (!usuario.getContrasena().equals(pass)) {
-//								JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Error",
-//										JOptionPane.ERROR_MESSAGE);
-//								return;
-//							} else {
-//								JOptionPane.showMessageDialog(this,
-//										"Login correcto. ¡Bienvenido/a " + usuario.getNickname(), "Login",
-//										JOptionPane.INFORMATION_MESSAGE);
-//								// Cambiar de pantalla
-//								frame.setContentPane(new WorkoutsPanel(frame, usuario));
-//								frame.validate();
-//							}
-//						} else {
-//							JOptionPane.showMessageDialog(this, "El usuario no existe.", "Error",
-//									JOptionPane.INFORMATION_MESSAGE);
-//						}
-//					}
-//				} catch (FileNotFoundException fnf) {
-//					JOptionPane.showMessageDialog(null,
-//							"Para poder usar la aplicacion en modo sin conexión, inicia sesión al menos una vez con conexión a internet.",
-//							"Error", JOptionPane.ERROR_MESSAGE);
-//				} catch (IOException ex) {
-//					ex.printStackTrace();
-//				} catch (ExecutionException ee) {
-//					ee.printStackTrace();
-//				} catch (InterruptedException ie) {
-//					ie.printStackTrace();
-//				}
-//			}
 		});
 	}
 }

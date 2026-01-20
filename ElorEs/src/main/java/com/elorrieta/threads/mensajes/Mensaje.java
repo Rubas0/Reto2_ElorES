@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Mensaje implements Serializable {
 
     protected String tipoOperacion = null;
-    protected String json = null;
+    protected Object contenido = null;
 
     private static final long serialVersionUID = -1981368956803217148L;
     
@@ -13,9 +13,9 @@ public class Mensaje implements Serializable {
         super();
     }
 
-    public Mensaje(String tipoOperacion, String json) {
+    public Mensaje(String tipoOperacion, Object contenido) {
         this.tipoOperacion = tipoOperacion;
-        this.json = json;
+        this.contenido = contenido;
     }
 
 	public void setTipoOperacion(String tipoOperacion) {
@@ -26,11 +26,11 @@ public class Mensaje implements Serializable {
         return tipoOperacion;
     }
 
-    public void setJson(String json) {
-        this.json = json;
+    public void setContenido(Object contenido) {
+        this.contenido = contenido;
     }
 
-    public String getJson() {
-        return json;
+    public Object getContenido() {
+        return contenido;
     }
 }
