@@ -3,6 +3,9 @@ package com.elorrieta.vistas;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -110,6 +113,17 @@ public class LoginPanel extends JPanel {
 		txtForgot.setForeground(Color.WHITE);
 		add(txtForgot);
 
+		// Acción del texto "¿Has olvidado tu contraseña?"
+		txtForgot.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				frame.setContentPane(new ResetPasswdPanel(frame));
+				frame.revalidate(); // Actualizar el contenido del frame
+				frame.repaint(); // Refrescar la ventana
+			}
+		});
+
 		// Evento del botón login
 		loginButton.addActionListener(e -> {
 			String nickname = nicknameField.getText().trim();
@@ -130,8 +144,7 @@ public class LoginPanel extends JPanel {
 						return;
 					} else {
 						JOptionPane.showMessageDialog(this, "Login correcto. ¡Bienvenido/a " + userLogin.getUsername(),
-								"Login",
-								JOptionPane.INFORMATION_MESSAGE);
+								"Login", JOptionPane.INFORMATION_MESSAGE);
 
 					}
 				} catch (Exception ex) {
