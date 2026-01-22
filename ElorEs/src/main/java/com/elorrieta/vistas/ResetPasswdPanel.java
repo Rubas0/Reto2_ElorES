@@ -4,9 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-
-import com.elorrieta.tcp.TcpPassReset;
-
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
@@ -22,6 +19,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import com.elorrieta.tcpConnection.TcpPassReset;
+
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;

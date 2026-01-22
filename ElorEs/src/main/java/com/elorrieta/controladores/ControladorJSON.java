@@ -1,7 +1,7 @@
 package com.elorrieta.controladores;
 
 import com.elorrieta.entities.User;
-import com.elorrieta.threads.mensajes.parts.LoginParts;
+import com.elorrieta.tcpEnvios.mensajes.parts.LoginParts;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

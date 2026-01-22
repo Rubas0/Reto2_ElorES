@@ -1,20 +1,21 @@
-package com.elorrieta.tcp;
+package com.elorrieta.tcpConnection;
 
-import com.elorrieta.entities.User;
-import com.elorrieta.threads.mensajes.Mensaje;
-import com.elorrieta.threads.mensajes.parts.LoginParts;
-
+import java.util.List;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class TcpLogin {
+import com.elorrieta.entities.User;
+import com.elorrieta.tcpEnvios.mensajes.Mensaje;
 
-    public static User login(String nickname, String password) {
-        Socket socket = null;
+public class TcpAlumnosDeProfesor {
+
+	public static List<User> getAlumnosDeProfesor(User profesor) {
+		Socket socket = null;
         String ipServer = "127.0.0.1";
         int puertoServer = 49171;
+        
         try {
             // Crear el socket para conectarse al servidor
             socket = new Socket(ipServer, puertoServer);
@@ -23,18 +24,15 @@ public class TcpLogin {
             // Crear ObjectOutputStream para enviar objetos
             ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
 
-            // Crear un objeto LOGINPARTS
-            LoginParts loginParts = new LoginParts(nickname, password);
-
             // Generar el objeto MENSAJE
-            Mensaje mensaje = new Mensaje("LOGIN", loginParts);
+            Mensaje mensaje = new Mensaje("GET_ALUMNOS_PROFESOR", profesor);
 
             // Enviar el objeto
             objectOutput.writeObject(mensaje);
             objectOutput.flush();
 
             System.out.println(
-                    "usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion() + ", loginparts: "
+                    "usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion() + ", Profesor: "
                             + mensaje.getContenido().toString());
 
             // recibir respuesta del servidor
@@ -43,9 +41,11 @@ public class TcpLogin {
             System.out
                     .println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getContenido().toString());
 
-            // Convertir el CONTENIDO DEL MENSAJE recibido a un objeto User
-            User userRespuesta = (User) mensajeRespuesta.getContenido();
-            System.out.println("Cliente - Usuario recibido: " + userRespuesta.getUsername());
+            // Convertir el CONTENIDO DEL MENSAJE recibido a una lista de usuarios
+            List<User> respuestaList = (List<User>) mensajeRespuesta.getContenido(); 
+            for (User user : respuestaList) {
+            	System.out.println("Cliente - Usuario recibido: " + user.getUsername());
+			}
 
             // Cerrar recursos
             objectOutput.close();
@@ -53,7 +53,7 @@ public class TcpLogin {
             socket.close();
 
             // Devolver el usuario recibido
-            return userRespuesta;
+            return respuestaList;
 
         } catch (IOException e) {
             System.err.println("Error de E/S: " + e.getMessage());
@@ -64,5 +64,6 @@ public class TcpLogin {
             System.out.println("Cliente - Error: " + e.getMessage());
             return null;
         }
-    }
+	}
+
 }

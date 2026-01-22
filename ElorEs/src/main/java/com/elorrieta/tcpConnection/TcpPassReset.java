@@ -1,12 +1,12 @@
-package com.elorrieta.tcp;
-
-import com.elorrieta.threads.mensajes.Mensaje;
+package com.elorrieta.tcpConnection;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.JOptionPane;
+
+import com.elorrieta.tcpEnvios.mensajes.Mensaje;
 
 public class TcpPassReset {
 

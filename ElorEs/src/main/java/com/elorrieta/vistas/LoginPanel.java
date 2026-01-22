@@ -19,7 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.elorrieta.entities.User;
-import com.elorrieta.tcp.TcpLogin;
+import com.elorrieta.tcpConnection.TcpLogin;
 
 public class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
