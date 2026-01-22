@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.elorrieta.entities.User;
 import com.elorrieta.tcp.TcpLogin;
@@ -25,102 +27,97 @@ public class LoginPanel extends JPanel {
 	private JTextField nicknameField;
 	private JPasswordField passwordField;
 	private JButton loginButton;
-	private JButton registerButton;
-	// private JLabel logoLabel;
 
 	public LoginPanel(JFrame frame) {
-		frame.setSize(400, 480);
+		frame.setSize(400, 430);
 		setLayout(null);
-		setBackground(Color.decode("#232637"));
+		setBackground(new Color(240, 240, 240));
 
-		// Logito
-		// logoLabel = new JLabel(new ImageIcon(getClass().getResource("/Logo01.svg")));
-		// logoLabel.setBounds(140, 15, 100, 50);
-		// add(logoLabel);
-
-		// Etiqueta de título
-		titleLabel = new JLabel("<html><b>Inicia Sesión con tu cuenta de SpinningCat</b></html>");
-		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setBackground(new Color(0, 0, 0, 100)); // Negro con transparencia
-		titleLabel.setOpaque(true);
-		titleLabel.setFont(new Font("Roboto", Font.BOLD, 20));
-		titleLabel.setBounds(35, 30, 300, 60);
+		// Título
+		titleLabel = new JLabel("Inicia Sesión");
+		titleLabel.setForeground(new Color(70, 130, 180));
+		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLabel.setBounds(50, 30, 300, 40);
 		add(titleLabel);
 
-		// Campos de texto
-		nicknameField = new JTextField();
-		nicknameField.setFont(new Font("Arial", Font.PLAIN, 16));
-		nicknameField.setBounds(35, 120, 300, 35);
-		nicknameField.setBackground(new Color(39, 42, 61));
-		nicknameField.setForeground(Color.WHITE);
-		nicknameField.setCaretColor(Color.WHITE);
-		nicknameField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Nickname", 0, 0,
-				null, new Color(180, 180, 180)));
-		add(nicknameField);
+		// Panel blanco para los campos
+		JPanel panelCampos = new JPanel();
+		panelCampos.setLayout(null);
+		panelCampos.setBackground(Color.WHITE);
+		panelCampos.setBorder(new EmptyBorder(15, 15, 15, 15));
+		panelCampos.setBounds(35, 90, 320, 220);
+		add(panelCampos);
 
-		// Campo de contraseña
+		// Campo de nickname
+		JLabel lblNickname = new JLabel("Usuario");
+		lblNickname.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblNickname.setBounds(10, 15, 280, 20);
+		panelCampos.add(lblNickname);
+
+		nicknameField = new JTextField();
+		nicknameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		nicknameField.setBounds(10, 40, 280, 35);
+		nicknameField.setBackground(new Color(245, 245, 245));
+		nicknameField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+		panelCampos.add(nicknameField);
+
+		// Campo de password
+		JLabel lblPassword = new JLabel("Contraseña");
+		lblPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblPassword.setBounds(10, 90, 280, 20);
+		panelCampos.add(lblPassword);
+
 		passwordField = new JPasswordField();
-		passwordField.setFont(new Font("Arial", Font.PLAIN, 16));
-		passwordField.setBounds(35, 170, 300, 35);
-		passwordField.setBackground(new Color(39, 42, 61));
-		passwordField.setForeground(Color.WHITE);
-		passwordField.setCaretColor(Color.WHITE);
-		passwordField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Password", 0, 0,
-				null, new Color(180, 180, 180)));
-		add(passwordField);
+		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		passwordField.setBounds(10, 115, 280, 35);
+		passwordField.setBackground(new Color(245, 245, 245));
+		passwordField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+		panelCampos.add(passwordField);
+
+		// Texto "¿Has olvidado tu contraseña?"
+		JTextPane txtForgot = new JTextPane();
+		txtForgot.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		txtForgot.setEditable(false);
+		txtForgot.setOpaque(false);
+		txtForgot.setText("¿Has olvidado tu contraseña?");
+		txtForgot.setBounds(10, 160, 280, 25);
+		txtForgot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		txtForgot.setForeground(new Color(70, 130, 180));
+		panelCampos.add(txtForgot);
 
 		// Botón de login
-		loginButton = new JButton("Log in");
-		loginButton.setBounds(35, 270, 300, 45);
-		loginButton.setFont(new Font("Arial", Font.BOLD, 18));
+		loginButton = new JButton("Iniciar Sesión");
+		loginButton.setBounds(35, 330, 320, 40);
+		loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		loginButton.setForeground(Color.WHITE);
-		loginButton.setBackground(new Color(255, 98, 0));
+		loginButton.setBackground(new Color(70, 130, 180));
 		loginButton.setBorderPainted(false);
 		loginButton.setFocusPainted(false);
 		loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		add(loginButton);
 
-		// Botón de registro
-		registerButton = new JButton("Register");
-		registerButton.setBounds(35, 320, 300, 40);
-		registerButton.setFont(new Font("Arial", Font.BOLD, 16));
-		registerButton.setForeground(Color.WHITE);
-		registerButton.setBackground(new Color(100, 100, 100));
-		registerButton.setBorderPainted(false);
-		registerButton.setFocusPainted(false);
-		registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		add(registerButton);
+		// Efecto hover del botón login
+		loginButton.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				loginButton.setBackground(new Color(100, 149, 237));
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				loginButton.setBackground(new Color(70, 130, 180));
+			}
+		});
 
 		// Hacer que el botón login sea el predeterminado al pulsar Enter
 		frame.getRootPane().setDefaultButton(loginButton);
 
-		// Imagen de fondo (está en /resources)
-		// ImageIcon fondo = new
-		// ImageIcon(getClass().getResource("/BackgroundLogin.png"));
-		// JLabel fondoLabel = new JLabel(fondo);
-		// fondoLabel.setBounds(0, 0, 400, 400);
-		// add(fondoLabel);
-
-		// Texto de "¿Has olvidado tu contraseña?"
-		JTextPane txtForgot = new JTextPane();
-		txtForgot.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtForgot.setEditable(false);
-		txtForgot.setOpaque(false);
-		txtForgot.setBackground(new Color(0, 0, 0, 0));
-		txtForgot.setText("¿Has olvidado tu contraseña?");
-		txtForgot.setBounds(35, 377, 234, 26);
-		txtForgot.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		txtForgot.setForeground(Color.WHITE);
-		add(txtForgot);
-
 		// Acción del texto "¿Has olvidado tu contraseña?"
 		txtForgot.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				frame.setContentPane(new ResetPasswdPanel(frame));
-				frame.revalidate(); // Actualizar el contenido del frame
-				frame.repaint(); // Refrescar la ventana
+				frame.revalidate();
+				frame.repaint();
 			}
 		});
 
@@ -133,19 +130,18 @@ public class LoginPanel extends JPanel {
 				JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
-
 				try {
 					User userLogin = TcpLogin.login(nickname, pass);
 					if (userLogin == null) {
-
 						JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error",
 								JOptionPane.ERROR_MESSAGE);
-
 						return;
 					} else {
 						JOptionPane.showMessageDialog(this, "Login correcto. ¡Bienvenido/a " + userLogin.getUsername(),
 								"Login", JOptionPane.INFORMATION_MESSAGE);
-
+						frame.setContentPane(new MenuPanel(userLogin, frame));
+						frame.revalidate();
+						frame.repaint();
 					}
 				} catch (Exception ex) {
 					System.out.println("error en el login tcp");

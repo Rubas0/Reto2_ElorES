@@ -10,7 +10,7 @@ public class ElorEs extends JFrame {
 	private LoginPanel loginPanel;
 
 	public ElorEs() {
-		setTitle("SpinningCat");
+		setTitle("ElorEs");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setLocationRelativeTo(null);
