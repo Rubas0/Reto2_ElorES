@@ -25,14 +25,20 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.elorrieta.entities.Ciclo;
+import com.elorrieta.entities.Matriculaciones;
 import com.elorrieta.entities.User;
 import com.elorrieta.tcpConnection.TcpAlumnosDeProfesor;
+import com.elorrieta.tcpConnection.TcpAlumnosFilter;
+import com.elorrieta.tcpConnection.TcpCiclos;
+
+import javax.swing.JComboBox;
 
 public class ConsultarAlumnosPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public ConsultarAlumnosPanel(User user, JFrame frame) {
+	public ConsultarAlumnosPanel(User profesor, JFrame frame) {
 		frame.setSize(900, 600);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
@@ -50,7 +56,7 @@ public class ConsultarAlumnosPanel extends JPanel {
 		panelTabla.setLayout(null);
 		panelTabla.setBackground(Color.WHITE);
 		panelTabla.setBorder(new EmptyBorder(15, 15, 15, 15));
-		panelTabla.setBounds(50, 80, 800, 420);
+		panelTabla.setBounds(50, 129, 800, 420);
 		add(panelTabla);
 
 		// ========== Tabla de alumnos ========== \\
@@ -77,11 +83,11 @@ public class ConsultarAlumnosPanel extends JPanel {
 		panelTabla.add(scrollPane);
 
 		// ========== Cargar datos de alumnos ========== \\
-		List<User> alumnos = TcpAlumnosDeProfesor.getAlumnosDeProfesor(user);
+		List<User> alumnos = TcpAlumnosDeProfesor.getAlumnosDeProfesor(profesor);
 		if (alumnos != null) {
 			for (User alumno : alumnos) {
 				if (alumno != null) {
-					Object[] fila = { alumno.getNombre() != null ? alumno.getNombre() : "N/A",
+					String[] fila = { alumno.getNombre() != null ? alumno.getNombre() : "N/A",
 							alumno.getApellidos() != null ? alumno.getApellidos() : "N/A",
 							alumno.getUsername() != null ? alumno.getUsername() : "N/A",
 							alumno.getEmail() != null ? alumno.getEmail() : "N/A",
@@ -91,6 +97,31 @@ public class ConsultarAlumnosPanel extends JPanel {
 			}
 		}
 
+		// ========= Listener para mostrar datos de un alumno ========= \\
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) { // Doble clic
+					int selectedRow = table.getSelectedRow();
+					if (selectedRow != -1) {
+						String username = (String) model.getValueAt(selectedRow, 2);
+						User alumnoSeleccionado = null;
+						for (User alumno : alumnos) {
+							if (alumno.getUsername().equals(username)) {
+								alumnoSeleccionado = alumno;
+								break;
+							}
+						}
+						if (alumnoSeleccionado != null) {
+							frame.setContentPane(new PerfilPanel(profesor, alumnoSeleccionado, frame));
+							frame.revalidate();
+							frame.repaint();
+						}
+					}
+				}
+			}
+		});
+
 		// ========== Botón Volver ========== \\
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -99,15 +130,93 @@ public class ConsultarAlumnosPanel extends JPanel {
 		btnVolver.setFocusPainted(false);
 		btnVolver.setBorderPainted(false);
 		btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnVolver.setBounds(375, 520, 150, 35);
+		btnVolver.setBounds(376, 560, 150, 35);
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new MenuPanel(user, frame));
+				frame.setContentPane(new MenuPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
 		});
 		add(btnVolver);
+
+		// ========== Filtros ========== \\
+		JComboBox<String> comboBoxCiclo = new JComboBox<String>();
+		comboBoxCiclo.setBounds(189, 96, 128, 22);
+		add(comboBoxCiclo);
+
+		JLabel lblCicloFilter = new JLabel("Filtrar por ciclo:");
+		lblCicloFilter.setBounds(82, 100, 97, 14);
+		List<Ciclo> ciclos = TcpCiclos.getCiclos();
+		if (ciclos != null) {
+			comboBoxCiclo.addItem("Todos");
+			for (Ciclo ciclo : ciclos) {
+				comboBoxCiclo.addItem(ciclo.getNombre());
+			}
+		}
+		add(lblCicloFilter);
+
+		JLabel lblCursoFilter = new JLabel("Filtrar por Curso");
+		lblCursoFilter.setBounds(523, 100, 110, 14);
+		add(lblCursoFilter);
+
+		JComboBox<Object> comboBoxCurso = new JComboBox<Object>();
+		comboBoxCurso.setBounds(654, 96, 190, 22);
+		comboBoxCurso.addItem("Todos");
+		comboBoxCurso.addItem(1);
+		comboBoxCurso.addItem(2);
+		add(comboBoxCurso);
+
+		// =========== Lógica de filtrado ========== \\
+		ActionListener filtroListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String cicloSeleccionado = (String) comboBoxCiclo.getSelectedItem();
+				Object cursoSeleccionado = comboBoxCurso.getSelectedItem();
+
+				// Limpiar la tabla
+				model.setRowCount(0);
+
+				// Preparar los filtros para enviar al servidor
+				Matriculaciones matriculacionFiltro = new Matriculaciones();
+				if (cursoSeleccionado instanceof Integer) {
+					matriculacionFiltro.setCurso((Integer) cursoSeleccionado);
+				} else {
+					matriculacionFiltro = null;
+				}
+
+				Ciclo cicloFiltro = new Ciclo();
+				if (cicloSeleccionado != null && !cicloSeleccionado.equals("Todos")) {
+					for (Ciclo ciclo : ciclos) {
+						if (ciclo.getNombre().equals(cicloSeleccionado)) {
+							cicloFiltro = ciclo;
+							break;
+						}
+					}
+				} else {
+					cicloFiltro = null;
+				}
+				// Obtener los alumnos filtrados desde el servidor
+				List<User> usersFilter = TcpAlumnosFilter.getAlumnosFiltrados(cicloFiltro, matriculacionFiltro, profesor);
+				// Actualizar la tabla con los alumnos filtrados
+				if (usersFilter != null) {
+					for (User alumno : usersFilter) {
+						if (alumno != null) {
+							String[] fila = { alumno.getNombre() != null ? alumno.getNombre() : "N/A",
+									alumno.getApellidos() != null ? alumno.getApellidos() : "N/A",
+									alumno.getUsername() != null ? alumno.getUsername() : "N/A",
+									alumno.getEmail() != null ? alumno.getEmail() : "N/A",
+									alumno.getDni() != null ? alumno.getDni() : "N/A" };
+							model.addRow(fila);
+						}
+					}
+				}
+			}
+		};
+		
+		// ========== Añadir listeners a los comboBoxes ========== \\
+		comboBoxCiclo.addActionListener(filtroListener);
+		comboBoxCurso.addActionListener(filtroListener);
 
 		// ========== Efecto hover del botón ========== \\
 		btnVolver.addMouseListener(new MouseAdapter() {

@@ -13,7 +13,7 @@ public class TcpAlumnosDeProfesor {
 
 	public static List<User> getAlumnosDeProfesor(User profesor) {
 		Socket socket = null;
-        String ipServer = "127.0.0.1";
+        String ipServer = "10.5.104.109";
         int puertoServer = 49171;
         
         try {

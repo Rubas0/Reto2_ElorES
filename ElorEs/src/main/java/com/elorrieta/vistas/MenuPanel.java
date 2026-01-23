@@ -25,7 +25,7 @@ public class MenuPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public MenuPanel(User user, JFrame frame) {
+	public MenuPanel(User profesor, JFrame frame) {
 
 		frame.setSize(600, 550);
 		setLayout(null);
@@ -40,7 +40,7 @@ public class MenuPanel extends JPanel {
 		add(lblTitulo);
 
 		JLabel lblUsername = new JLabel(
-				user.getNombre() + " " + (user.getApellidos() != null ? user.getApellidos() : ""));
+				profesor.getNombre() + " " + (profesor.getApellidos() != null ? profesor.getApellidos() : ""));
 		lblUsername.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		lblUsername.setForeground(new Color(100, 100, 100));
 		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
@@ -66,7 +66,7 @@ public class MenuPanel extends JPanel {
 		btnPerfil.setBorderPainted(false);
 		btnPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new PerfilPanel(user, frame));
+				frame.setContentPane(new PerfilPanel(profesor, profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
@@ -83,7 +83,7 @@ public class MenuPanel extends JPanel {
 		btnVerAlumnos.setBorderPainted(false);
 		btnVerAlumnos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new ConsultarAlumnosPanel(user, frame));
+				frame.setContentPane(new ConsultarAlumnosPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
@@ -100,7 +100,7 @@ public class MenuPanel extends JPanel {
 		btnVerHorario.setBorderPainted(false);
 		btnVerHorario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new ConsultarHorarioPanel(user, frame));
+				frame.setContentPane(new ConsultarHorarioPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
@@ -117,7 +117,7 @@ public class MenuPanel extends JPanel {
 		btnVerOtrosHorarios.setBorderPainted(false);
 		btnVerOtrosHorarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new ConsultarOtrosHorariosPanel(user, frame));
+				frame.setContentPane(new ConsultarOtrosHorariosPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
@@ -134,7 +134,7 @@ public class MenuPanel extends JPanel {
 		btnGestionarReuniones.setBorderPainted(false);
 		btnGestionarReuniones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new GestionarReunionesPanel(user, frame));
+				frame.setContentPane(new GestionarReunionesPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}

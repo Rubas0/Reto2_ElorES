@@ -30,13 +30,13 @@ public class PerfilPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public PerfilPanel(User user, JFrame frame) {
+	public PerfilPanel(User profesor, User perfil, JFrame frame) {
 		frame.setSize(700, 650);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 
 		// ========= Título ========== \\
-		JLabel lblTitulo = new JLabel("Mi Perfil");
+		JLabel lblTitulo = new JLabel("Perfil de Usuario");
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		lblTitulo.setForeground(new Color(70, 130, 180));
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -51,9 +51,9 @@ public class PerfilPanel extends JPanel {
 		lblFoto.setBorder(new EmptyBorder(5, 5, 5, 5));
 		lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
 
-		if (user.getArgazkiaUrl() != null && !user.getArgazkiaUrl().isEmpty()) {
+		if (perfil.getArgazkiaUrl() != null && !perfil.getArgazkiaUrl().isEmpty()) {
 			try {
-				URL urlImagen = new URL(user.getArgazkiaUrl());
+				URL urlImagen = new URL(perfil.getArgazkiaUrl());
 				ImageIcon icon = new ImageIcon(urlImagen);
 				Image img = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
 				lblFoto.setIcon(new ImageIcon(img));
@@ -80,55 +80,55 @@ public class PerfilPanel extends JPanel {
 		int yPosition = 20;
 		int spacing = 35;
 
-		JLabel lblNombre = new JLabel("Nombre: " + (user.getNombre() != null ? user.getNombre() : "N/A"));
+		JLabel lblNombre = new JLabel("Nombre: " + (perfil.getNombre() != null ? perfil.getNombre() : "N/A"));
 		lblNombre.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblNombre.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblNombre);
 		yPosition += spacing;
 
-		JLabel lblApellidos = new JLabel("Apellidos: " + (user.getApellidos() != null ? user.getApellidos() : "N/A"));
+		JLabel lblApellidos = new JLabel("Apellidos: " + (perfil.getApellidos() != null ? perfil.getApellidos() : "N/A"));
 		lblApellidos.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblApellidos.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblApellidos);
 		yPosition += spacing;
 
-		JLabel lblUsername = new JLabel("Usuario: " + (user.getUsername() != null ? user.getUsername() : "N/A"));
+		JLabel lblUsername = new JLabel("Usuario: " + (perfil.getUsername() != null ? perfil.getUsername() : "N/A"));
 		lblUsername.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblUsername.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblUsername);
 		yPosition += spacing;
 
-		JLabel lblEmail = new JLabel("Email: " + (user.getEmail() != null ? user.getEmail() : "N/A"));
+		JLabel lblEmail = new JLabel("Email: " + (perfil.getEmail() != null ? perfil.getEmail() : "N/A"));
 		lblEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblEmail.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblEmail);
 		yPosition += spacing;
 
-		JLabel lblDni = new JLabel("DNI: " + (user.getDni() != null ? user.getDni() : "N/A"));
+		JLabel lblDni = new JLabel("DNI: " + (perfil.getDni() != null ? perfil.getDni() : "N/A"));
 		lblDni.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblDni.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblDni);
 		yPosition += spacing;
 
-		JLabel lblDireccion = new JLabel("Dirección: " + (user.getDireccion() != null ? user.getDireccion() : "N/A"));
+		JLabel lblDireccion = new JLabel("Dirección: " + (perfil.getDireccion() != null ? perfil.getDireccion() : "N/A"));
 		lblDireccion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblDireccion.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblDireccion);
 		yPosition += spacing;
 
-		JLabel lblTelefono1 = new JLabel("Teléfono 1: " + (user.getTelefono1() != null ? user.getTelefono1() : "N/A"));
+		JLabel lblTelefono1 = new JLabel("Teléfono 1: " + (perfil.getTelefono1() != null ? perfil.getTelefono1() : "N/A"));
 		lblTelefono1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTelefono1.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblTelefono1);
 		yPosition += spacing;
 
-		JLabel lblTelefono2 = new JLabel("Teléfono 2: " + (user.getTelefono2() != null ? user.getTelefono2() : "N/A"));
+		JLabel lblTelefono2 = new JLabel("Teléfono 2: " + (perfil.getTelefono2() != null ? perfil.getTelefono2() : "N/A"));
 		lblTelefono2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTelefono2.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblTelefono2);
 		yPosition += spacing;
 
-		JLabel lblTipo = new JLabel("Tipo de usuario: " + (user.getTipo() != null ? user.getTipo().getName() : "N/A"));
+		JLabel lblTipo = new JLabel("Tipo de usuario: " + (perfil.getTipo() != null ? perfil.getTipo().getName() : "N/A"));
 		lblTipo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTipo.setBounds(20, yPosition, 390, 25);
 		panelInfo.add(lblTipo);
@@ -143,7 +143,7 @@ public class PerfilPanel extends JPanel {
 		btnNewButton.setBounds(275, 550, 150, 35);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new MenuPanel(user, frame));
+				frame.setContentPane(new MenuPanel(profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
