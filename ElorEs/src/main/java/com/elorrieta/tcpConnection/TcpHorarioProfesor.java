@@ -6,14 +6,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-import com.elorrieta.entities.Ciclo;
-import com.elorrieta.entities.Matriculaciones;
+import com.elorrieta.entities.Horario;
 import com.elorrieta.entities.User;
 import com.elorrieta.tcpEnvios.mensajes.Mensaje;
 import com.elorrieta.tcpEnvios.mensajes.parts.FilterParts;
 
-public class TcpAlumnosFilter {
-	public static List<User> getAlumnosFiltrados(Ciclo ciclo, Matriculaciones matriculaciones, User profesor) {
+public class TcpHorarioProfesor {
+
+	public static List<Horario> getHorarioProfesor(User profesor) {
 		Socket socket = null;
 		String ipServer = "10.5.104.109";
 		int puertoServer = 49171;
@@ -23,20 +23,17 @@ public class TcpAlumnosFilter {
 			socket = new Socket(ipServer, puertoServer);
 			System.out.println("Cliente - Iniciando conexión con " + ipServer + " en el puerto " + puertoServer);
 
-			// Crear FilterParts con los filtros
-			FilterParts filterParts = new FilterParts(ciclo, matriculaciones, profesor);
-
 			// Crear ObjectOutputStream para enviar objetos
 			ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
 
 			// Generar el objeto MENSAJE
-			Mensaje mensaje = new Mensaje("GET_ALUMNOS_FILTRO", filterParts);
+			Mensaje mensaje = new Mensaje("GET_HORARIO_PROFESOR", profesor);
 
 			// Enviar el objeto
 			objectOutput.writeObject(mensaje);
 			objectOutput.flush();
 
-			System.out.println("usuario enviado:  " + "tipoOP:" + mensaje.getTipoOperacion());
+			System.out.println("profesor enviado:  " + "tipoOP:" + mensaje.getTipoOperacion());
 
 			// recibir respuesta del servidor
 			ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
@@ -44,10 +41,10 @@ public class TcpAlumnosFilter {
 			System.out
 					.println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getContenido().toString());
 
-			// Convertir el CONTENIDO DEL MENSAJE recibido a una lista de usuarios
-			List<User> respuestaList = (List<User>) mensajeRespuesta.getContenido();
-			for (User user : respuestaList) {
-				System.out.println("Cliente - Usuario recibido: " + user.getUsername());
+			// Convertir el CONTENIDO DEL MENSAJE recibido a una lista de horarios
+			List<Horario> respuestaList = (List<Horario>) mensajeRespuesta.getContenido();
+			for (Horario horario : respuestaList) {
+				System.out.println("Cliente - Horario recibido: " + horario.getModulo().getNombre());
 			}
 
 			// Cerrar recursos
@@ -68,4 +65,5 @@ public class TcpAlumnosFilter {
 			return null;
 		}
 	}
+
 }

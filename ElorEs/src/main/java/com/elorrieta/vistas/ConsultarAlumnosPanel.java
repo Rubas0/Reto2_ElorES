@@ -39,7 +39,7 @@ public class ConsultarAlumnosPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public ConsultarAlumnosPanel(User profesor, JFrame frame) {
-		frame.setSize(900, 600);
+		frame.setSize(900, 650);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 
