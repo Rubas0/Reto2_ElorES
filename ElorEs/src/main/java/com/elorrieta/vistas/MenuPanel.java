@@ -26,8 +26,8 @@ public class MenuPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public MenuPanel(User profesor, JFrame frame) {
-
 		frame.setSize(600, 550);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 

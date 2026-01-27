@@ -30,6 +30,7 @@ public class LoginPanel extends JPanel {
 
 	public LoginPanel(JFrame frame) {
 		frame.setSize(400, 430);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 

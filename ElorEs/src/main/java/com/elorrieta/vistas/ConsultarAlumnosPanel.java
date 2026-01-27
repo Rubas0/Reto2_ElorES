@@ -40,6 +40,7 @@ public class ConsultarAlumnosPanel extends JPanel {
 
 	public ConsultarAlumnosPanel(User profesor, JFrame frame) {
 		frame.setSize(900, 650);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 

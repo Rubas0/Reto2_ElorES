@@ -32,6 +32,7 @@ public class ResetPasswdPanel extends JPanel {
 
 	public ResetPasswdPanel(JFrame frame) {
 		frame.setSize(400, 430);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 

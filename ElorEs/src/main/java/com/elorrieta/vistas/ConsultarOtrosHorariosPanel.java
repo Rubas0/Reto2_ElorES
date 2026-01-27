@@ -21,6 +21,7 @@ public class ConsultarOtrosHorariosPanel extends JPanel {
 
 	public ConsultarOtrosHorariosPanel(User user, JFrame frame) {
 		frame.setSize(500, 400);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 
 		JButton btnNewButton = new JButton("volver");

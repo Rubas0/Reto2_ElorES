@@ -21,10 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 
 public class PerfilPanel extends JPanel {
@@ -33,6 +31,7 @@ public class PerfilPanel extends JPanel {
 
 	public PerfilPanel(User profesor, User perfil, JFrame frame) {
 		frame.setSize(700, 650);
+		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 
@@ -54,11 +53,6 @@ public class PerfilPanel extends JPanel {
 
 		if (perfil.getArgazkiaUrl() != null && !perfil.getArgazkiaUrl().isEmpty()) {
 			try {
-				
-				
-//				URL urlImagen = new URL(perfil.getArgazkiaUrl());
-//				ImageIcon icon = new ImageIcon(urlImagen);
-//				Image img = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
 				lblFoto.setIcon(new ImageIcon(TcpImagenPerfil.getImagenPerfilDeUsuario(perfil)));
 			} catch (Exception e) {
 				lblFoto.setText("Sin foto");
