@@ -15,7 +15,7 @@ public class TcpHorarioProfesor {
 
 	public static List<Horario> getHorarioProfesor(User profesor) {
 		Socket socket = null;
-		String ipServer = "10.5.104.109";
+		String ipServer = "10.5.104.110";
 		int puertoServer = 49171;
 
 		try {

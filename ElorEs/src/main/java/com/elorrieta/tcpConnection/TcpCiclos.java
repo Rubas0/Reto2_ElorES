@@ -11,7 +11,7 @@ import com.elorrieta.tcpEnvios.mensajes.Mensaje;
 public class TcpCiclos {
 	public static List<Ciclo> getCiclos() {
 		Socket socket = null;
-		String ipserver = "10.5.104.109";
+		String ipserver = "10.5.104.110";
 		int puertoServer = 49171;
 		try {
 			// Crear el socket para conectarse al servidor

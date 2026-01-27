@@ -6,6 +6,7 @@ import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 import com.elorrieta.entities.User;
+import com.elorrieta.tcpConnection.TcpImagenPerfil;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -53,10 +54,12 @@ public class PerfilPanel extends JPanel {
 
 		if (perfil.getArgazkiaUrl() != null && !perfil.getArgazkiaUrl().isEmpty()) {
 			try {
-				URL urlImagen = new URL(perfil.getArgazkiaUrl());
-				ImageIcon icon = new ImageIcon(urlImagen);
-				Image img = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
-				lblFoto.setIcon(new ImageIcon(img));
+				
+				
+//				URL urlImagen = new URL(perfil.getArgazkiaUrl());
+//				ImageIcon icon = new ImageIcon(urlImagen);
+//				Image img = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
+				lblFoto.setIcon(new ImageIcon(TcpImagenPerfil.getImagenPerfilDeUsuario(perfil)));
 			} catch (Exception e) {
 				lblFoto.setText("Sin foto");
 				lblFoto.setFont(new Font("Segoe UI", Font.PLAIN, 12));

@@ -13,7 +13,7 @@ public class TcpLogin {
 
     public static User login(String nickname, String password) {
         Socket socket = null;
-        String ipServer = "10.5.104.109";
+        String ipServer = "10.5.104.110";
         int puertoServer = 49171;
         try {
             // Crear el socket para conectarse al servidor

@@ -1,19 +1,22 @@
 package com.elorrieta.tcpConnection;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-import com.elorrieta.entities.Ciclo;
-import com.elorrieta.entities.Matriculaciones;
+import javax.imageio.ImageIO;
+
 import com.elorrieta.entities.User;
 import com.elorrieta.tcpEnvios.mensajes.Mensaje;
-import com.elorrieta.tcpEnvios.mensajes.parts.FilterParts;
 
-public class TcpAlumnosFilter {
-	public static List<User> getAlumnosFiltrados(Ciclo ciclo, Matriculaciones matriculaciones, User profesor) {
+public class TcpImagenPerfil {
+
+	public static Image getImagenPerfilDeUsuario(User usuario) {
 		Socket socket = null;
 		String ipServer = "10.5.104.110";
 		int puertoServer = 49171;
@@ -23,14 +26,11 @@ public class TcpAlumnosFilter {
 			socket = new Socket(ipServer, puertoServer);
 			System.out.println("Cliente - Iniciando conexión con " + ipServer + " en el puerto " + puertoServer);
 
-			// Crear FilterParts con los filtros
-			FilterParts filterParts = new FilterParts(ciclo, matriculaciones, profesor);
-
 			// Crear ObjectOutputStream para enviar objetos
 			ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
 
 			// Generar el objeto MENSAJE
-			Mensaje mensaje = new Mensaje("GET_ALUMNOS_FILTRO", filterParts);
+			Mensaje mensaje = new Mensaje("GET_PROFILE_IMG", usuario);
 
 			// Enviar el objeto
 			objectOutput.writeObject(mensaje);
@@ -44,19 +44,21 @@ public class TcpAlumnosFilter {
 			System.out
 					.println("Cliente - Mensaje recibido del servidor: " + mensajeRespuesta.getContenido().toString());
 
-			// Convertir el CONTENIDO DEL MENSAJE recibido a una lista de usuarios
-			List<User> respuestaList = (List<User>) mensajeRespuesta.getContenido();
-			for (User user : respuestaList) {
-				System.out.println("Cliente - Usuario recibido: " + user.getUsername());
-			}
-
+			// Convertir el CONTENIDO DEL MENSAJE recibido a un bytes[]
+			byte[] respuesta = (byte[]) mensajeRespuesta.getContenido();
+			// Convertir bytes a Imagen
+			ByteArrayInputStream bais = new ByteArrayInputStream(respuesta);
+			BufferedImage imagenPerfil = ImageIO.read(bais);
+			// Escalar la imagen al tamaño deseado
+			Image pfp = imagenPerfil.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			// Cerrar recursos
 			objectOutput.close();
 			objectInput.close();
+			bais.close();
 			socket.close();
 
 			// Devolver el usuario recibido
-			return respuestaList;
+			return pfp;
 
 		} catch (IOException e) {
 			System.err.println("Error de E/S: " + e.getMessage());
