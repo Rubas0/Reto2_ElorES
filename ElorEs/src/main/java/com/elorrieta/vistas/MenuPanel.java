@@ -100,7 +100,7 @@ public class MenuPanel extends JPanel {
 		btnVerHorario.setBorderPainted(false);
 		btnVerHorario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new ConsultarHorarioPanel(profesor, frame));
+				frame.setContentPane(new ConsultarHorarioPanel(profesor, profesor, frame));
 				frame.revalidate();
 				frame.repaint();
 			}

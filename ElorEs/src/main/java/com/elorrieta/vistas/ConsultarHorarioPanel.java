@@ -44,7 +44,7 @@ public class ConsultarHorarioPanel extends JPanel {
 	private boolean[][] celdaReunionPendiente;
 	private boolean[][] celdaReunionRechazada;
 
-	public ConsultarHorarioPanel(User user, JFrame frame) {
+	public ConsultarHorarioPanel(User userLogin, User userHorario, JFrame frame) {
 		frame.setSize(1100, 700);
 		frame.setLocationRelativeTo(null);
 		setLayout(null);
@@ -153,8 +153,8 @@ public class ConsultarHorarioPanel extends JPanel {
 		panelTabla.add(scrollPane);
 
 		// ========== Cargar datos iniciales ========== \\
-		horariosProfesor = TcpHorarioProfesor.getHorarioProfesor(user);
-		reunionesProfesor = TcpReunionesProfe.getReunionesDeProfesor(user);
+		horariosProfesor = TcpHorarioProfesor.getHorarioProfesor(userHorario);
+		reunionesProfesor = TcpReunionesProfe.getReunionesDeProfesor(userHorario);
 
 		cargarHorario(1);
 
@@ -178,7 +178,7 @@ public class ConsultarHorarioPanel extends JPanel {
 		btnVolver.setBounds(475, 580, 150, 40);
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setContentPane(new MenuPanel(user, frame));
+				frame.setContentPane(new MenuPanel(userLogin, frame));
 				frame.revalidate();
 				frame.repaint();
 			}
