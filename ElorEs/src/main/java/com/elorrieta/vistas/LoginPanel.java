@@ -3,10 +3,12 @@ package com.elorrieta.vistas;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,36 +31,50 @@ public class LoginPanel extends JPanel {
 	private JButton loginButton;
 
 	public LoginPanel(JFrame frame) {
-		frame.setSize(400, 430);
+		frame.setSize(500, 600); // Aumentar tamaño
 		frame.setLocationRelativeTo(null);
 		setLayout(null);
 		setBackground(new Color(240, 240, 240));
 
+		// Logo
+		try {
+			ImageIcon iconoOriginal = new ImageIcon(getClass().getClassLoader().getResource("EEM-logo-color.png"));
+			Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(300, 120, Image.SCALE_SMOOTH);
+			ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+			JLabel lblLogo = new JLabel(iconoEscalado);
+			lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+			lblLogo.setBounds(90, 30, 300, 120);
+			add(lblLogo);
+		} catch (Exception e) {
+			System.err.println("No se pudo cargar el logo: " + e.getMessage());
+		}
+
 		// Título
 		titleLabel = new JLabel("Inicia Sesión");
 		titleLabel.setForeground(new Color(70, 130, 180));
-		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		titleLabel.setBounds(50, 30, 300, 40);
+		titleLabel.setBounds(50, 160, 400, 45);
 		add(titleLabel);
 
 		// Panel blanco para los campos
 		JPanel panelCampos = new JPanel();
 		panelCampos.setLayout(null);
 		panelCampos.setBackground(Color.WHITE);
-		panelCampos.setBorder(new EmptyBorder(15, 15, 15, 15));
-		panelCampos.setBounds(35, 90, 320, 220);
+		panelCampos.setBorder(new EmptyBorder(20, 20, 20, 20));
+		panelCampos.setBounds(50, 220, 400, 240);
 		add(panelCampos);
 
 		// Campo de nickname
 		JLabel lblNickname = new JLabel("Usuario");
 		lblNickname.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblNickname.setBounds(10, 15, 280, 20);
+		lblNickname.setBounds(15, 20, 350, 20);
 		panelCampos.add(lblNickname);
 
 		nicknameField = new JTextField();
 		nicknameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		nicknameField.setBounds(10, 40, 280, 35);
+		nicknameField.setBounds(15, 45, 350, 40);
 		nicknameField.setBackground(new Color(245, 245, 245));
 		nicknameField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 		panelCampos.add(nicknameField);
@@ -66,12 +82,12 @@ public class LoginPanel extends JPanel {
 		// Campo de password
 		JLabel lblPassword = new JLabel("Contraseña");
 		lblPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblPassword.setBounds(10, 90, 280, 20);
+		lblPassword.setBounds(15, 100, 350, 20);
 		panelCampos.add(lblPassword);
 
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		passwordField.setBounds(10, 115, 280, 35);
+		passwordField.setBounds(15, 125, 350, 40);
 		passwordField.setBackground(new Color(245, 245, 245));
 		passwordField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 		panelCampos.add(passwordField);
@@ -82,15 +98,15 @@ public class LoginPanel extends JPanel {
 		txtForgot.setEditable(false);
 		txtForgot.setOpaque(false);
 		txtForgot.setText("¿Has olvidado tu contraseña?");
-		txtForgot.setBounds(10, 160, 280, 25);
+		txtForgot.setBounds(15, 180, 350, 25);
 		txtForgot.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		txtForgot.setForeground(new Color(70, 130, 180));
 		panelCampos.add(txtForgot);
 
 		// Botón de login
 		loginButton = new JButton("Iniciar Sesión");
-		loginButton.setBounds(35, 330, 320, 40);
-		loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		loginButton.setBounds(50, 480, 400, 45);
+		loginButton.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		loginButton.setForeground(Color.WHITE);
 		loginButton.setBackground(new Color(70, 130, 180));
 		loginButton.setBorderPainted(false);
@@ -138,11 +154,17 @@ public class LoginPanel extends JPanel {
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					} else {
-						JOptionPane.showMessageDialog(this, "Login correcto. ¡Bienvenido/a " + userLogin.getUsername(),
-								"Login", JOptionPane.INFORMATION_MESSAGE);
-						frame.setContentPane(new MenuPanel(userLogin, frame));
-						frame.revalidate();
-						frame.repaint();
+						if (userLogin.getTipo().getId() == 3) {
+							JOptionPane.showMessageDialog(this,
+									"Login correcto. ¡Bienvenido/a " + userLogin.getUsername(), "Login",
+									JOptionPane.INFORMATION_MESSAGE);
+							frame.setContentPane(new MenuPanel(userLogin, frame));
+							frame.revalidate();
+							frame.repaint();
+						} else {
+							JOptionPane.showMessageDialog(this, "Acceso denegado. El usuario aportado no es profesor.", "Error",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				} catch (Exception ex) {
 					System.out.println("error en el login tcp");
