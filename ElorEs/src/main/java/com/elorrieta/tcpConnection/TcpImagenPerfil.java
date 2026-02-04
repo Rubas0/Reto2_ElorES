@@ -2,12 +2,10 @@ package com.elorrieta.tcpConnection;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
@@ -18,8 +16,20 @@ public class TcpImagenPerfil {
 
 	public static Image getImagenPerfilDeUsuario(User usuario) {
 		Socket socket = null;
-		String ipServer = "10.5.104.110";
-		int puertoServer = 49171;
+		Properties properties = new Properties();
+		// Cargar las propiedades desde el archivo config.properties
+		try (InputStream input = TcpImagenPerfil.class.getClassLoader().getResourceAsStream("config.properties")) {
+			if (input == null) {
+				throw new IOException("Archivo config.properties no encontrado");
+			}
+			properties.load(input);
+		} catch (IOException e) {
+			System.err.println("Error al cargar config.properties: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+		String ipServer = properties.getProperty("tcp.server.ip");
+		int puertoServer = Integer.parseInt(properties.getProperty("tcp.server.port"));
 
 		try {
 			// Crear el socket para conectarse al servidor

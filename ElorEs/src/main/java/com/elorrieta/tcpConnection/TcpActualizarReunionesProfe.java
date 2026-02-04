@@ -1,10 +1,12 @@
 package com.elorrieta.tcpConnection;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.Properties;
 
 import com.elorrieta.entities.Reuniones;
 import com.elorrieta.entities.User;
@@ -15,8 +17,19 @@ public class TcpActualizarReunionesProfe {
 
 	public static void actualizarReuniones(List<Reuniones> reuniones, User profe) {
 		Socket socket = null;
-		String ipServer = "10.5.104.110";
-		int puertoServer = 49171;
+		Properties properties = new Properties();
+		// Cargar las propiedades desde el archivo config.properties
+		try (InputStream input = TcpActualizarReunionesProfe.class.getClassLoader().getResourceAsStream("config.properties")) {
+			if (input == null) {
+				throw new IOException("Archivo config.properties no encontrado");
+			}
+			properties.load(input);
+		} catch (IOException e) {
+			System.err.println("Error al cargar config.properties: " + e.getMessage());
+			e.printStackTrace();
+		}
+		String ipServer = properties.getProperty("tcp.server.ip");
+		int puertoServer = Integer.parseInt(properties.getProperty("tcp.server.port"));
 
 		try {
 			// Crear el socket para conectarse al servidor

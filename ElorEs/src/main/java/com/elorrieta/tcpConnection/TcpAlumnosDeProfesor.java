@@ -1,10 +1,12 @@
 package com.elorrieta.tcpConnection;
 
+import java.io.InputStream;
 import java.util.List;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Properties;
 
 import com.elorrieta.entities.User;
 import com.elorrieta.tcpEnvios.mensajes.Mensaje;
@@ -12,9 +14,21 @@ import com.elorrieta.tcpEnvios.mensajes.Mensaje;
 public class TcpAlumnosDeProfesor {
 
 	public static List<User> getAlumnosDeProfesor(User profesor) {
-		Socket socket = null;
-        String ipServer = "10.5.104.110";
-        int puertoServer = 49171;
+        Socket socket = null;
+        Properties properties = new Properties();
+        // Cargar las propiedades desde el archivo config.properties
+        try (InputStream input = TcpAlumnosDeProfesor.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                throw new IOException("Archivo config.properties no encontrado");
+            }
+            properties.load(input);
+        } catch (IOException e) {
+            System.err.println("Error al cargar config.properties: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+        String ipServer = properties.getProperty("tcp.server.ip");
+        int puertoServer = Integer.parseInt(properties.getProperty("tcp.server.port"));
         
         try {
             // Crear el socket para conectarse al servidor
